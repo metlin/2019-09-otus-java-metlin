@@ -5,22 +5,28 @@ import java.util.function.UnaryOperator;
 
 public class DIYarrayList<E> implements List<E> {
 
-    private E[] array = (E[]) new Object[0];
+    private E[] array = (E[]) new Object[10];
+    private int arraySize = 0;
 
     @Override
     public int size() {
-        return array.length;
+        return arraySize;
     }
 
     @Override
     public boolean isEmpty() {
-        return array.length == 0;
+        return arraySize == 0;
     }
 
     @Override
     public boolean contains(Object object) {
+        if (object == null && checkNull()) {
+            System.out.println("Объект " + object + " содержится в коллекции");
+            return true;
+        }
+
         for (E e : array) {
-            if (e.equals(object)) {
+            if (object != null && object.equals(e)) {
                 System.out.println("Объект " + object + " содержится в коллекции");
                 return true;
             }
@@ -46,22 +52,17 @@ public class DIYarrayList<E> implements List<E> {
     }
 
     private void expandArray(E oldArray[]) {
-        E[] newArray = (E[]) new Object[oldArray.length + 1];
-
-        for (int i = 0; i < oldArray.length; i++) {
-            newArray[i] = oldArray[i];
-        }
-
+        E[] newArray = (E[]) new Object[oldArray.length * 2];
+        System.arraycopy(oldArray, 0, newArray, 0, oldArray.length);
         array = newArray;
     }
 
-    private void reduceArray(E oldArray[]) {
+    private void reduceArray(E oldArray[], int index) {
         E[] newArray = (E[]) new Object[oldArray.length - 1];
-
         int y = 0;
-        for (E e : oldArray) {
-            if (e != null) {
-                newArray[y] = e;
+        for (int i = 0; i < oldArray.length; i++) {
+            if (i != index) {
+                newArray[y] = oldArray[i];
                 y++;
             }
         }
@@ -69,19 +70,9 @@ public class DIYarrayList<E> implements List<E> {
         array = newArray;
     }
 
-    private void checkIndex(int index) {
-        if (index > size()) {
-            throw new ArrayIndexOutOfBoundsException("Index: " + index + ", Size: " + size());
-        }
-    }
-
-    @Override
-    public boolean add(E e) {
-        expandArray(array);
-
-        for (int i = 0; i < array.length; i++) {
+    private boolean checkNull() {
+        for (int i = 0; i < arraySize; i++) {
             if (array[i] == null) {
-                array[i] = e;
                 return true;
             }
         }
@@ -89,12 +80,51 @@ public class DIYarrayList<E> implements List<E> {
         return false;
     }
 
+    private int indexNull() {
+        for (int i = 0; i < arraySize; i++) {
+            if (array[i] == null) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private void checkIndex(int index) {
+        if (index >= size()) {
+            throw new ArrayIndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+        }
+    }
+
+    @Override
+    public boolean add(E e) {
+        if (arraySize >= array.length) {
+            expandArray(array);
+        }
+
+        for (int i = arraySize; i < array.length; i++) {
+            if (array[i] == null) {
+                array[i] = e;
+                arraySize++;
+                return true;
+            }
+        }
+
+        throw new IllegalArgumentException();
+    }
+
     @Override
     public boolean remove(Object object) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].equals(object)) {
-                array[i] = null;
-                reduceArray(array);
+        if (object == null && checkNull()) {
+            reduceArray(array, indexNull());
+            arraySize--;
+            return true;
+        }
+
+        for (int i = 0; i < arraySize; i++) {
+            if (object != null && object.equals(array[i])) {
+                reduceArray(array, i);
+                arraySize--;
                 return true;
             }
         }
@@ -135,6 +165,10 @@ public class DIYarrayList<E> implements List<E> {
 
     @Override
     public void sort(Comparator<? super E> c) {
+        E[] newArray = (E[]) new Object[arraySize];
+        System.arraycopy(array, 0, newArray, 0, arraySize);
+        array = newArray;
+
         Arrays.sort(array, c);
     }
 
@@ -157,21 +191,14 @@ public class DIYarrayList<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
-        checkIndex(index);
-        expandArray(array);
-
-        for (int i = 0; i < array.length; i++) {
-            if (i == index) {
-                array[i] = element;
-                System.out.println("Объект " + element + " успешно добавлен");
-            }
-        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public E remove(int index) {
         checkIndex(index);
-        return array[index] = null;
+        remove(get(index));
+        return array[index];
     }
 
     @Override
@@ -261,7 +288,11 @@ public class DIYarrayList<E> implements List<E> {
 
     @Override
     public String toString() {
-        return Arrays.toString(array);
+        String string = "[";
+        for (int i = 0; i < arraySize; i++) {
+            string = string + array[i] + ", ";
+        }
 
+        return string + "]";
     }
 }
