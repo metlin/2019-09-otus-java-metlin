@@ -6,16 +6,16 @@ import java.util.function.UnaryOperator;
 public class DIYarrayList<E> implements List<E> {
 
     private E[] array = (E[]) new Object[10];
-    private int arraySize = 0;
+    private int listSize = 0;
 
     @Override
     public int size() {
-        return arraySize;
+        return listSize;
     }
 
     @Override
     public boolean isEmpty() {
-        return arraySize == 0;
+        return listSize == 0;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class DIYarrayList<E> implements List<E> {
     }
 
     private boolean checkNull() {
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < listSize; i++) {
             if (array[i] == null) {
                 return true;
             }
@@ -81,7 +81,7 @@ public class DIYarrayList<E> implements List<E> {
     }
 
     private int indexNull() {
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < listSize; i++) {
             if (array[i] == null) {
                 return i;
             }
@@ -98,33 +98,33 @@ public class DIYarrayList<E> implements List<E> {
 
     @Override
     public boolean add(E e) {
-        if (arraySize >= array.length) {
+        if (listSize >= array.length) {
             expandArray(array);
         }
 
-        for (int i = arraySize; i < array.length; i++) {
+        for (int i = listSize; i < array.length; i++) {
             if (array[i] == null) {
                 array[i] = e;
-                arraySize++;
+                listSize++;
                 return true;
             }
         }
 
-        throw new IllegalArgumentException();
+        return false;
     }
 
     @Override
     public boolean remove(Object object) {
         if (object == null && checkNull()) {
             reduceArray(array, indexNull());
-            arraySize--;
+            listSize--;
             return true;
         }
 
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < listSize; i++) {
             if (object != null && object.equals(array[i])) {
                 reduceArray(array, i);
-                arraySize--;
+                listSize--;
                 return true;
             }
         }
@@ -165,8 +165,8 @@ public class DIYarrayList<E> implements List<E> {
 
     @Override
     public void sort(Comparator<? super E> c) {
-        E[] newArray = (E[]) new Object[arraySize];
-        System.arraycopy(array, 0, newArray, 0, arraySize);
+        E[] newArray = (E[]) new Object[listSize];
+        System.arraycopy(array, 0, newArray, 0, listSize);
         array = newArray;
 
         Arrays.sort(array, c);
@@ -289,7 +289,7 @@ public class DIYarrayList<E> implements List<E> {
     @Override
     public String toString() {
         String string = "[";
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < listSize; i++) {
             string = string + array[i] + ", ";
         }
 
