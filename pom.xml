@@ -10,6 +10,7 @@
     <version>2019-09-SNAPSHOT</version>
     <modules>
         <module>hw01-maven</module>
+        <module>hw02-array-list</module>
     </modules>
 
     <properties>
