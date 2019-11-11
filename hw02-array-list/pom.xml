@@ -25,7 +25,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.homework.Main</mainClass>
+                            <mainClass>ru.otus.homework3.homework.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
