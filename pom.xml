@@ -11,6 +11,7 @@
     <modules>
         <module>hw01-maven</module>
         <module>hw02-array-list</module>
+        <module>hw03-garbage-collector</module>
     </modules>
 
     <properties>
