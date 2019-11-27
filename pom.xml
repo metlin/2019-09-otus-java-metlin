@@ -13,6 +13,7 @@
         <module>hw02-array-list</module>
         <module>hw03-garbage-collector</module>
         <module>hw4-log</module>
+        <module>hw5-annotations</module>
     </modules>
 
     <properties>
