@@ -4,13 +4,12 @@ import ru.otus.homework5.annotations.After;
 import ru.otus.homework5.annotations.Before;
 import ru.otus.homework5.annotations.Test;
 import ru.otus.homework5.test.TestCounter;
-import ru.otus.homework5.test.TestInterface;
 
-public class TestClass2 implements TestInterface {
+public class TestClass2 {
 
     private int number;
 
-    @Before
+   // @Before
     public void beforeTest() {
         number = 15;
     }
@@ -26,7 +25,7 @@ public class TestClass2 implements TestInterface {
         TestCounter.testCounter++;
     }
 
-    @After
+   // @After
     public void afterTest() {
         number = 0;
     }

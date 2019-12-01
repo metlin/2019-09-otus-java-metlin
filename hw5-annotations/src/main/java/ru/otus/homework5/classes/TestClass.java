@@ -4,9 +4,8 @@ import ru.otus.homework5.annotations.After;
 import ru.otus.homework5.annotations.Before;
 import ru.otus.homework5.annotations.Test;
 import ru.otus.homework5.test.TestCounter;
-import ru.otus.homework5.test.TestInterface;
 
-public class TestClass implements TestInterface {
+public class TestClass {
 
     private String string;
 
@@ -24,6 +23,13 @@ public class TestClass implements TestInterface {
         }
 
         TestCounter.testCounter++;
+    }
+
+    @Test
+    public void failTestMethod() {
+        TestCounter.failedCounter++;
+        TestCounter.testCounter++;
+        throw new NullPointerException("NPE");
     }
 
     @After

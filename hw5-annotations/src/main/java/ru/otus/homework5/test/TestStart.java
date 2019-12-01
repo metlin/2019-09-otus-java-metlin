@@ -4,35 +4,54 @@ import ru.otus.homework5.annotations.After;
 import ru.otus.homework5.annotations.Before;
 import ru.otus.homework5.annotations.Test;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
 public class TestStart {
-    private Map<String, String> mapMethods = new HashMap<>();
+    private List<Method> testMethods = new ArrayList<>();
+    private List<Method> beforeMethods = new ArrayList<>();
+    private List<Method> afterMethods = new ArrayList<>();
 
     public void startTest(Class<?> clazz) {
-        TestInterface testClass = (TestInterface)getInstance(clazz);
-        Method[] methods =  clazz.getDeclaredMethods();
+        beforeMethods = getMethods(clazz, Before.class);
+        testMethods = getMethods(clazz, Test.class);
+        afterMethods = getMethods(clazz, After.class);
 
-        for (Method method : methods) {
-            if (testClass != null && method.isAnnotationPresent(Before.class)) {
-                mapMethods.put("before", method.getName());
+        for(Method method : testMethods) {
+            Object testClass = getInstance(clazz);
+            try {
+                invokeMethods(testClass, beforeMethods);
+                method.invoke(testClass);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.getCause().getMessage();
+            } finally {
+                invokeMethods(testClass, afterMethods);
             }
+        }
+    }
 
-            if(method.isAnnotationPresent(Test.class)) {
-                mapMethods.put("test", method.getName());
+    private void invokeMethods(Object clazz, List<Method> methods) {
+        for(Method method : methods) {
+            try {
+                method.invoke(clazz);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
             }
+        }
+    }
 
-            if(testClass != null && method.isAnnotationPresent(After.class)) {
-                mapMethods.put("after", method.getName());
+    private List<Method> getMethods(Class<?> clazz, Class<? extends Annotation> annotation) {
+        List<Method> list = new ArrayList<>();
+        Method[] methods = clazz.getDeclaredMethods();
+        for(Method method : methods) {
+            if(method.isAnnotationPresent(annotation)) {
+               list.add(method);
             }
         }
 
-        if (testClass != null && checkBeforeMethods() && checkTestMethods() && checkAfterMethods()) {
-            testClass.beforeTest();
-            testClass.testMethod();
-            testClass.afterTest();
-        }
+        return list;
     }
 
     private Object getInstance(Class<?> clazz) {
@@ -45,17 +64,5 @@ public class TestStart {
         }
 
         return ob;
-    }
-
-    private boolean checkBeforeMethods() {
-        return mapMethods.get("before") != null && !mapMethods.get("before").isEmpty();
-    }
-
-    private boolean checkTestMethods() {
-        return mapMethods.get("test") != null && !mapMethods.get("test").isEmpty();
-    }
-
-    private boolean checkAfterMethods() {
-        return mapMethods.get("after") != null && !mapMethods.get("after").isEmpty();
     }
 }

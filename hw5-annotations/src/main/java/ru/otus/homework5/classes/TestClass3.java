@@ -4,9 +4,8 @@ import ru.otus.homework5.annotations.After;
 import ru.otus.homework5.annotations.Before;
 import ru.otus.homework5.annotations.Test;
 import ru.otus.homework5.test.TestCounter;
-import ru.otus.homework5.test.TestInterface;
 
-public class TestClass3 implements TestInterface {
+public class TestClass3 {
 
     private String string;
 
