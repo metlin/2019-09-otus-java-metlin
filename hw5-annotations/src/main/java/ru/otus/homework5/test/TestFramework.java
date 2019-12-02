@@ -9,15 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class TestStart {
-    private List<Method> testMethods = new ArrayList<>();
-    private List<Method> beforeMethods = new ArrayList<>();
-    private List<Method> afterMethods = new ArrayList<>();
-
+public class TestFramework {
     public void startTest(Class<?> clazz) {
-        beforeMethods = getMethods(clazz, Before.class);
-        testMethods = getMethods(clazz, Test.class);
-        afterMethods = getMethods(clazz, After.class);
+        List<Method> beforeMethods = getMethods(clazz, Before.class);
+        List<Method> testMethods = getMethods(clazz, Test.class);
+        List<Method> afterMethods = getMethods(clazz, After.class);
 
         for(Method method : testMethods) {
             Object testClass = getInstance(clazz);
