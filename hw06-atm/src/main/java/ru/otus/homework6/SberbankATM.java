@@ -1,35 +1,34 @@
 package ru.otus.homework6;
 
-import java.util.ArrayList;
-import java.util.List;
+import ru.otus.homework6.cells.ATMCell;
+import ru.otus.homework6.cells.ATMCellFifty;
+import ru.otus.homework6.cells.ATMCellHundred;
+import ru.otus.homework6.cells.ATMCellTen;
 
 public class SberbankATM implements ATM {
 
     private Integer balance = 0;
-    private List<Integer> banknotesTen = new ArrayList<>();
-    private List<Integer> banknotesFifty = new ArrayList<>();
-    private List<Integer> banknotesHundred = new ArrayList<>();
-    private final int TEN = 10;
-    private final int FIFTY = 50;
-    private final int HUNDRED = 100;
-
     private static int countHundred;
     private static int countFifty;
     private static int countTen;
 
+    private ATMCell atmCellTen = new ATMCellTen();
+    private ATMCell atmCellFifty = new ATMCellFifty();
+    private ATMCell atmCellHundred = new ATMCellHundred();
+
     @Override
     public void addBanknotes(int...banknotes) {
         for (int banknote : banknotes) {
-            if (banknote == TEN) {
-                banknotesTen.add(banknote);
+            if (banknote == atmCellTen.getNominal()) {
+                atmCellTen.addBanknotes(banknote);
             }
 
-            if (banknote == FIFTY) {
-                banknotesFifty.add(banknote);
+            if (banknote == atmCellFifty.getNominal()) {
+                atmCellFifty.addBanknotes(banknote);
             }
 
-            if (banknote == HUNDRED) {
-                banknotesHundred.add(banknote);
+            if (banknote == atmCellHundred.getNominal()) {
+                atmCellHundred.addBanknotes(banknote);
             }
         }
 
@@ -43,19 +42,19 @@ public class SberbankATM implements ATM {
             return;
         }
 
-        int numberOfHundred = sum/HUNDRED;
+        int numberOfHundred = sum/atmCellHundred.getNominal();
         if(numberOfHundred != 0) {
-            boolean containsHundred = checkBanknotes(banknotesHundred, numberOfHundred);
-            int numberOfBanknotes = banknotesHundred.size();
+            boolean containsHundred = ATMCellHelper.checkBanknotes(atmCellHundred.getBanknotesList(), numberOfHundred);
+            int numberOfBanknotes = atmCellHundred.getCellSize();
             if(!containsHundred && numberOfBanknotes != 0) {
                 countHundred = numberOfBanknotes;
             } else {
                 if(containsHundred) {
                     countHundred = numberOfHundred;
                 } else {
-                    int numberOfFifty = sum/FIFTY;
-                    boolean containsFifty =  checkBanknotes(banknotesFifty, numberOfFifty);
-                    numberOfBanknotes = banknotesFifty.size();
+                    int numberOfFifty = sum/atmCellFifty.getNominal();
+                    boolean containsFifty =  ATMCellHelper.checkBanknotes(atmCellFifty.getBanknotesList(), numberOfFifty);
+                    numberOfBanknotes = atmCellFifty.getCellSize();
 
                     //TODO: if ok, change the duplicate code to a method
                     if(!containsFifty && numberOfBanknotes != 0) {
@@ -64,9 +63,9 @@ public class SberbankATM implements ATM {
                         if(containsFifty) {
                             countFifty = numberOfFifty;
                         } else {
-                            int numberOfTen = sum / TEN;
-                            boolean containsTen = checkBanknotes(banknotesTen, numberOfTen);
-                            int numberOfBanknotes1 = banknotesTen.size();
+                            int numberOfTen = sum / atmCellTen.getNominal();
+                            boolean containsTen = ATMCellHelper.checkBanknotes(atmCellTen.getBanknotesList(), numberOfTen);
+                            int numberOfBanknotes1 = atmCellTen.getCellSize();
                             if(!containsTen && numberOfBanknotes1 != 0) {
                                 countTen = numberOfBanknotes;
                             }
@@ -82,20 +81,20 @@ public class SberbankATM implements ATM {
             }
         }
 
-        sum = sum - countHundred * HUNDRED;
-        int numberOfFifty = sum/FIFTY;
+        sum = sum - countHundred * atmCellHundred.getNominal();
+        int numberOfFifty = sum/atmCellFifty.getNominal();
         if(sum != 0 && numberOfFifty != 0) {
-            boolean containsFifty =  checkBanknotes(banknotesFifty, numberOfFifty);
-            int numberOfBanknotes = banknotesFifty.size();
+            boolean containsFifty =  ATMCellHelper.checkBanknotes(atmCellFifty.getBanknotesList(), numberOfFifty);
+            int numberOfBanknotes = atmCellFifty.getCellSize();
             if(!containsFifty && numberOfBanknotes != 0) {
                 countFifty = numberOfBanknotes;
             } else {
                 if(containsFifty) {
                     countFifty = numberOfFifty;
                 } else {
-                    int numberOfTen = sum / TEN;
-                    boolean containsTen = checkBanknotes(banknotesTen, numberOfTen);
-                    int numberOfBanknotes1 = banknotesTen.size();
+                    int numberOfTen = sum / atmCellTen.getNominal();
+                    boolean containsTen = ATMCellHelper.checkBanknotes(atmCellTen.getBanknotesList(), numberOfTen);
+                    int numberOfBanknotes1 = atmCellTen.getCellSize();
                     if(!containsTen && numberOfBanknotes1 != 0) {
                         countTen = numberOfBanknotes;
                     }
@@ -109,11 +108,11 @@ public class SberbankATM implements ATM {
             }
         }
 
-        sum = sum - countFifty * FIFTY;
-        int numberOfTen = sum / TEN;
+        sum = sum - countFifty * atmCellFifty.getNominal();
+        int numberOfTen = sum / atmCellTen.getNominal();
         if(sum != 0 && numberOfTen != 0) {
-            boolean containsTen = checkBanknotes(banknotesTen, numberOfTen);
-            int numberOfBanknotes = banknotesHundred.size();
+            boolean containsTen = ATMCellHelper.checkBanknotes(atmCellTen.getBanknotesList(), numberOfTen);
+            int numberOfBanknotes = atmCellHundred.getCellSize();
             if(!containsTen && numberOfBanknotes != 0) {
                 countTen = numberOfBanknotes;
             } else {
@@ -127,30 +126,20 @@ public class SberbankATM implements ATM {
             }
         }
 
-        removeElementsFromCollection(banknotesHundred, countHundred);
-        removeElementsFromCollection(banknotesFifty, countFifty);
-        removeElementsFromCollection(banknotesTen, countTen);
+        ATMCellHelper.removeElementsFromCollection(atmCellHundred.getBanknotesList(), countHundred);
+        ATMCellHelper.removeElementsFromCollection(atmCellFifty.getBanknotesList(), countFifty);
+        ATMCellHelper.removeElementsFromCollection(atmCellTen.getBanknotesList(), countTen);
         countHundred = 0;
         countFifty = 0;
         countTen = 0;
         setBalance();
     }
 
-    private boolean checkBanknotes(List<Integer> list, int numberOfBanknotes) {
-        return list.size() >= numberOfBanknotes && numberOfBanknotes != 0;
-    }
-
-    private void removeElementsFromCollection(List<Integer> list, int elements) {
-        for(int i = 0; i < elements; i++) {
-            list.remove(list.size() - 1);
-        }
-    }
-
     @Override
     public void showBalance() {
         setBalance();
         System.out.println("Balance - " + balance);
-        System.out.println("ten - " + banknotesTen.size() + " fifty - " + banknotesFifty.size() + " hundred - " + banknotesHundred.size());
+        System.out.println("ten - " + atmCellTen.getCellSize() + " fifty - " + atmCellFifty.getCellSize() + " hundred - " + atmCellHundred.getCellSize());
         System.out.println();
     }
 
@@ -160,15 +149,8 @@ public class SberbankATM implements ATM {
     }
 
     private void setBalance() {
-        balance = sumBanknotes(banknotesTen) + sumBanknotes(banknotesFifty) + sumBanknotes(banknotesHundred);
-    }
-
-    private Integer sumBanknotes(List<Integer> list) {
-        int sum = 0;
-        for(Integer integer : list) {
-            sum = sum + integer;
-        }
-
-        return sum;
+        balance = ATMCellHelper.sumBanknotes(atmCellTen.getBanknotesList())
+                + ATMCellHelper.sumBanknotes(atmCellFifty.getBanknotesList())
+                + ATMCellHelper.sumBanknotes(atmCellHundred.getBanknotesList());
     }
 }
