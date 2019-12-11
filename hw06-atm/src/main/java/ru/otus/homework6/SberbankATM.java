@@ -1,9 +1,6 @@
 package ru.otus.homework6;
 
-import ru.otus.homework6.cells.ATMCell;
-import ru.otus.homework6.cells.ATMCellFifty;
-import ru.otus.homework6.cells.ATMCellHundred;
-import ru.otus.homework6.cells.ATMCellTen;
+import ru.otus.homework6.cells.*;
 
 public class SberbankATM implements ATM {
 
@@ -12,24 +9,28 @@ public class SberbankATM implements ATM {
     private static int countFifty;
     private static int countTen;
 
-    private ATMCell atmCellTen = new ATMCellTen();
-    private ATMCell atmCellFifty = new ATMCellFifty();
-    private ATMCell atmCellHundred = new ATMCellHundred();
+    private ATMCell atmCellTen;
+    private ATMCell atmCellFifty;
+    private ATMCell atmCellHundred;
+
+    public SberbankATM(Nominal ten, Nominal fifty, Nominal hundred) {
+       atmCellTen = new ATMCellImpl(ten);
+       atmCellFifty = new ATMCellImpl(fifty);
+       atmCellHundred = new ATMCellImpl(hundred);
+    }
 
     @Override
-    public void addBanknotes(int...banknotes) {
-        for (int banknote : banknotes) {
-            if (banknote == atmCellTen.getNominal()) {
-                atmCellTen.addBanknotes(banknote);
-            }
+    public void addBanknotes(int banknote, int quantity) {
+        if (banknote == Nominal.TEN.getValue()) {
+            atmCellTen.addBanknotes(banknote, quantity);
+        }
 
-            if (banknote == atmCellFifty.getNominal()) {
-                atmCellFifty.addBanknotes(banknote);
-            }
+        if (banknote == Nominal.FIFTY.getValue()) {
+            atmCellFifty.addBanknotes(banknote, quantity);
+        }
 
-            if (banknote == atmCellHundred.getNominal()) {
-                atmCellHundred.addBanknotes(banknote);
-            }
+        if (banknote == Nominal.HUNDRED.getValue()) {
+            atmCellHundred.addBanknotes(banknote, quantity);
         }
 
         setBalance();

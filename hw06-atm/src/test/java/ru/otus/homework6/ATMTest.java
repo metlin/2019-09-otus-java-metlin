@@ -3,6 +3,7 @@ package ru.otus.homework6;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static ru.otus.homework6.cells.Nominal.*;
 
 public class ATMTest {
 
@@ -10,18 +11,18 @@ public class ATMTest {
 
     @Test
     public void getBanknotesTestPositive() {
-        atm = new SberbankATM();
-        atm.addBanknotes(10, 50, 100);
-        atm.issueRequestedAmount(60);
+        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm.addBanknotes(10, 50);
+        atm.issueRequestedAmount(500);
         int balance = atm.getBalance();
 
-        assertEquals(100, balance);
+        assertEquals(0, balance);
     }
 
     @Test
     public void getBanknotesTestNegative() {
-        atm = new SberbankATM();
-        atm.addBanknotes(10, 50, 100);
+        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm.addBanknotes(10, 50);
         atm.issueRequestedAmount(50);
         int balance = atm.getBalance();
 
@@ -30,16 +31,16 @@ public class ATMTest {
 
     @Test
     public void addBanknotesPositive() {
-        atm = new SberbankATM();
-        atm.addBanknotes(100, 50, 100, 10, 50);
+        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm.addBanknotes(100, 3);
         int balance = atm.getBalance();
-        assertEquals(310, balance);
+        assertEquals(300, balance);
     }
 
     @Test
     public void addBanknotesNegative() {
-        atm = new SberbankATM();
-        atm.addBanknotes(100, 50, 100, 10, 50);
+        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm.addBanknotes(100, 50);
         int balance = atm.getBalance();
         assertNotEquals(320, balance);
     }

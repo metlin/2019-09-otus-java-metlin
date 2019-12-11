@@ -1,27 +1,25 @@
 package ru.otus.homework6;
 
+import static ru.otus.homework6.cells.Nominal.*;
+
 public class Main {
     public static void main(String[] args) {
-        ATM atm = new SberbankATM();
+        ATM atm = new SberbankATM(TEN, FIFTY, HUNDRED);
         atm.showBalance();
-        atm.addBanknotes(10 ,50 ,50 ,100);
+        atm.addBanknotes(50 ,100);
         atm.showBalance();
         atm.issueRequestedAmount(110);
         atm.showBalance();
         atm.issueRequestedAmount(100);
         atm.showBalance();
-        atm.addBanknotes(100, 50, 50, 50);
+        atm.addBanknotes(100, 50);
         atm.showBalance();
         atm.issueRequestedAmount(150);
         atm.showBalance();
 
         atm.issueRequestedAmount(50000);
-        int count = 0;
-        while (count < 500) {
-            atm.addBanknotes(10, 50, 100);
-            count++;
-        }
 
+        atm.addBanknotes(10, 100);
         atm.showBalance();
         atm.issueRequestedAmount(3000);
         atm.showBalance();

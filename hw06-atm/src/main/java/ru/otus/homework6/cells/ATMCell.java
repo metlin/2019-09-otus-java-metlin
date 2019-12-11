@@ -5,6 +5,6 @@ import java.util.List;
 public interface ATMCell {
     public int getNominal();
     public int getCellSize();
-    public void addBanknotes(int banknotes);
+    public void addBanknotes(int banknote, int quantity);
     public List<Integer> getBanknotesList();
 }
