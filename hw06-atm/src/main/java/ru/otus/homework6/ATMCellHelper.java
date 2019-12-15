@@ -1,6 +1,9 @@
 package ru.otus.homework6;
 
-import java.util.List;
+import ru.otus.homework6.cells.ATMCell;
+import ru.otus.homework6.cells.Nominal;
+
+import java.util.*;
 
 public class ATMCellHelper {
 
@@ -21,5 +24,17 @@ public class ATMCellHelper {
         }
 
         return sum;
+    }
+
+    public static List sortedMap(Map<Nominal, ATMCell> atmCellMap) {
+        List list = new ArrayList(atmCellMap.entrySet());
+        Collections.sort(list, (Comparator<Map.Entry<Nominal, ATMCell>>) (a, b) -> b.getValue().getNominal() - a.getValue().getNominal());
+        return list;
+    }
+
+    public static void showQuantityOfBanknotes(Map<Nominal, ATMCell> atmCellMap) {
+        for (Map.Entry<Nominal, ATMCell> entry : atmCellMap.entrySet()) {
+            System.out.println(entry.getKey() + " - " + entry.getValue().getCellSize());
+        }
     }
 }

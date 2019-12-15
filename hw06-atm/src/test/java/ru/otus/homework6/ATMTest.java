@@ -11,7 +11,7 @@ public class ATMTest {
 
     @Test
     public void getBanknotesTestPositive() {
-        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm = new SberbankATM();
         atm.addBanknotes(10, 50);
         atm.issueRequestedAmount(500);
         int balance = atm.getBalance();
@@ -21,7 +21,7 @@ public class ATMTest {
 
     @Test
     public void getBanknotesTestNegative() {
-        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm = new SberbankATM();
         atm.addBanknotes(10, 50);
         atm.issueRequestedAmount(50);
         int balance = atm.getBalance();
@@ -31,7 +31,7 @@ public class ATMTest {
 
     @Test
     public void addBanknotesPositive() {
-        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm = new SberbankATM();
         atm.addBanknotes(100, 3);
         int balance = atm.getBalance();
         assertEquals(300, balance);
@@ -39,7 +39,7 @@ public class ATMTest {
 
     @Test
     public void addBanknotesNegative() {
-        atm = new SberbankATM(TEN,FIFTY,HUNDRED);
+        atm = new SberbankATM();
         atm.addBanknotes(100, 50);
         int balance = atm.getBalance();
         assertNotEquals(320, balance);

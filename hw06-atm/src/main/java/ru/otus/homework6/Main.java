@@ -1,10 +1,8 @@
 package ru.otus.homework6;
 
-import static ru.otus.homework6.cells.Nominal.*;
-
 public class Main {
     public static void main(String[] args) {
-        ATM atm = new SberbankATM(TEN, FIFTY, HUNDRED);
+        ATM atm = new SberbankATM();
         atm.showBalance();
         atm.addBanknotes(50 ,100);
         atm.showBalance();
@@ -27,6 +25,5 @@ public class Main {
         atm.showBalance();
         atm.issueRequestedAmount(2100);
         atm.showBalance();
-
     }
 }
