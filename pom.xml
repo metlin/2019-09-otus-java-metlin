@@ -14,6 +14,7 @@
         <module>hw03-garbage-collector</module>
         <module>hw4-log</module>
         <module>hw5-annotations</module>
+        <module>hw06-atm</module>
     </modules>
 
     <properties>
