@@ -15,6 +15,7 @@
         <module>hw4-log</module>
         <module>hw5-annotations</module>
         <module>hw06-atm</module>
+        <module>hw07-department</module>
     </modules>
 
     <properties>
