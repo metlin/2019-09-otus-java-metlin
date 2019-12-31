@@ -1,8 +1,9 @@
 package ru.otus.homework8;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Dog {
+public class Dog implements Serializable {
     private final String name;
     private final int age;
 

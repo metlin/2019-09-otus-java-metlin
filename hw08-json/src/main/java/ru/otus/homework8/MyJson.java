@@ -1,5 +1,6 @@
 package ru.otus.homework8;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
@@ -72,14 +73,14 @@ public class MyJson {
         return String.valueOf(number);
     }
 
-    public String toJson(Dog dog) {
-        if(dog == null) {
+    public String toJson(Serializable serializable) {
+        if(serializable == null) {
             return "null";
         }
 
         String json = "{";
-        Field[] fields = Dog.class.getDeclaredFields();
-        json = getJsonObject(json, dog, fields);
+        Field[] fields = serializable.getClass().getDeclaredFields();
+        json = getJsonObject(json, serializable, fields);
 
         json = json.substring(0, json.length() - 1);
         return json;
