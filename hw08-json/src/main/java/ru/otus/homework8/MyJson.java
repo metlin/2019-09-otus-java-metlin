@@ -27,26 +27,31 @@ public class MyJson {
         for(Object object : objects) {
             json += "{";
             Field[] fields = object.getClass().getDeclaredFields();
-            for(Field field : fields) {
-                try {
-                    field.setAccessible(true);
-                    if(field.get(object) instanceof Number) {
-                        json += "\"" + field.getName() + "\":" + field.get(object) + ",";
-                    } else {
-                        json += "\"" + field.getName() + "\":\"" + field.get(object) + "\",";
-                    }
-
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            json = json.substring(0, json.length() - 1);
-            json += "},";
+            json = getJsonObject(json, object, fields);
         }
 
         json = json.substring(0, json.length() - 1);
         return json + "]";
+    }
+
+    private String getJsonObject(String json, Object object, Field[] fields) {
+        for(Field field : fields) {
+            try {
+                field.setAccessible(true);
+                if(field.get(object) instanceof Number) {
+                    json += "\"" + field.getName() + "\":" + field.get(object) + ",";
+                } else {
+                    json += "\"" + field.getName() + "\":\"" + field.get(object) + "\",";
+                }
+
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        json = json.substring(0, json.length() - 1);
+        json += "},";
+        return json;
     }
 
     public <T> String toJson(Collection<T> collection) {
@@ -61,5 +66,22 @@ public class MyJson {
             json = json.substring(0, json.length() - 2);
 
             return json + "]";
+    }
+
+    public String toJson(Number number) {
+        return String.valueOf(number);
+    }
+
+    public String toJson(Dog dog) {
+        if(dog == null) {
+            return "null";
+        }
+
+        String json = "{";
+        Field[] fields = Dog.class.getDeclaredFields();
+        json = getJsonObject(json, dog, fields);
+
+        json = json.substring(0, json.length() - 1);
+        return json;
     }
 }
