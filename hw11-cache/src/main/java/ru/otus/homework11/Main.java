@@ -1,6 +1,7 @@
 package ru.otus.homework11;
 
 import org.hibernate.SessionFactory;
+import ru.otus.homework11.cachehw.HWCacheDemo;
 import ru.otus.homework11.cachehw.HwCache;
 import ru.otus.homework11.cachehw.MyCache;
 import ru.otus.homework11.dao.UserDao;
@@ -24,23 +25,25 @@ public class Main {
 
         SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml", User.class, AddressDataSet.class, PhoneDataSet.class);
         SessionManager sessionManager = new SessionManagerHibernate(sessionFactory);
-
         UserDao userDao = new UserDaoImpl(sessionManager);
-        UserService userService = new UserServiceImpl(userDao);
-        User user = new User(1, "Ivan", 3);
-        user.setAddress(new AddressDataSet("Lenina street"));
+        HwCache<Long, User> cache = new MyCache<>();
+        UserService userService = new UserServiceImpl(userDao, cache);
 
-        user.setPhoneNumber(List.of(new PhoneDataSet("12345"), new PhoneDataSet("234")));
+        for (int i = 0; i < 520; i++) {
+            User user = new User("Ivan", 3);
+            user.setAddress(new AddressDataSet("Lenina street"));
+            user.setPhoneNumber(List.of(new PhoneDataSet("12345"), new PhoneDataSet("234")));
 
-        long userId = userService.saveUser(user);
-        Optional userOptional = userService.getTemplate(userId);
-        System.out.println(userOptional);
+            long userId = userService.saveUser(user);
+            Optional userOptional = userService.getTemplate(userId);
+            System.out.println(userOptional);
 
-        user.setName("Andrey");
-        user.setAddress(new AddressDataSet("Gagarina street"));
-        long userIdUpdate = userService.updateTemplate(user);
-        Optional userOptionalUpdate = userService.getTemplate(userIdUpdate);
-        System.out.println(userOptionalUpdate);
+            user.setName("Andrey");
+            user.setAddress(new AddressDataSet("Gagarina street"));
+            long userIdUpdate = userService.updateTemplate(user);
+            Optional userOptionalUpdate = userService.getTemplate(userIdUpdate);
+            System.out.println(userOptionalUpdate);
+        }
 
         time = System.nanoTime() - time;
         System.out.printf("Elapsed %,9.3f ms\n", time/1_000_000.0);

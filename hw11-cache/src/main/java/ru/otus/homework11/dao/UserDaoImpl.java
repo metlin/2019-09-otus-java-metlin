@@ -7,8 +7,6 @@ import ru.otus.homework11.hibernate.sessionmanager.DatabaseSessionHibernate;
 import ru.otus.homework11.model.User;
 import ru.otus.homework11.sessionmanager.SessionManager;
 
-import java.util.Optional;
-
 public class UserDaoImpl implements UserDao {
 
     private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);

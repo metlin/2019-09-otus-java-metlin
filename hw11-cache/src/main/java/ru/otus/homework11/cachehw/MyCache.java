@@ -7,31 +7,44 @@ import java.util.WeakHashMap;
 
 public class MyCache<K, V> implements HwCache<K, V> {
 
-  private final Map<K, V> cache = new WeakHashMap<>();
-  private final List<HwListener> listeners = new ArrayList<>();
+    private final Map<K, V> cache = new WeakHashMap<>();
+    private final List<HwListener> listeners = new ArrayList<>();
+    private final int MAX_CACHE_SIZE = 500;
 
-  @Override
-  public void put(K key, V value) {
-      cache.put(key, value);
-  }
+    @Override
+    public void put(K key, V value) {
+        if (cache.size() > MAX_CACHE_SIZE) {
+            cache.clear();
+        }
 
-  @Override
-  public void remove(K key) {
-      cache.remove(key);
-  }
+        cache.put(key, value);
+        checkListener(key, value, "put");
+    }
 
-  @Override
-  public V get(K key) {
-      return cache.get(key);
-  }
+    @Override
+    public void remove(K key) {
+        V value = cache.remove(key);
+        checkListener(key, value, "remove");
+    }
 
-  @Override
-  public void addListener(HwListener listener) {
-      listeners.add(listener);
-  }
+    @Override
+    public V get(K key) {
+        return cache.get(key);
+    }
 
-  @Override
-  public void removeListener(HwListener listener) {
-      listeners.remove(listener);
-  }
+    @Override
+    public void addListener(HwListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(HwListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void checkListener(K key, V value, String action) {
+        if(!listeners.isEmpty()) {
+            listeners.get(0).notify(key, value, action);
+        }
+    }
 }

@@ -1,7 +1,9 @@
 package ru.otus.homework11.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.homework11.cachehw.HwCache;
-import ru.otus.homework11.cachehw.MyCache;
+import ru.otus.homework11.cachehw.HwListener;
 import ru.otus.homework11.dao.UserDao;
 import ru.otus.homework11.database.DbServiceException;
 import ru.otus.homework11.model.User;
@@ -11,11 +13,14 @@ import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
 
-   private UserDao userDao;
-   private HwCache<Long, User> cache = new MyCache<>();
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(UserDao userDao) {
+    private UserDao userDao;
+    private HwCache<Long, User> cache;
+
+    public UserServiceImpl(UserDao userDao, HwCache<Long, User> cache) {
         this.userDao = userDao;
+        this.cache = cache;
     }
 
     @Override
@@ -24,6 +29,7 @@ public class UserServiceImpl implements UserService {
             sessionManager.beginSession();
             try {
                 long userId = userDao.create(user);
+                cache.addListener(addNewListener());
                 cache.put(userId, user);
                 sessionManager.commitSession();
                 return userId;
@@ -54,6 +60,8 @@ public class UserServiceImpl implements UserService {
             sessionManager.beginSession();
             try {
                 long userId = userDao.update(user);
+                cache.addListener(addNewListener());
+                cache.put(userId, user);
                 sessionManager.commitSession();
                 return userId;
             } catch (Exception e) {
@@ -64,22 +72,21 @@ public class UserServiceImpl implements UserService {
     }
 
     private Optional<User> getValue(long id) {
-
         //with cache
-//        User value = cache.get(id);
-//        if (value == null) {
-//            value = userDao.load(id);
-//            cache.put(id, value);
-//        }
+        User value = cache.get(id);
+        if (value == null) {
+            value = userDao.load(id);
+            cache.put(id, value);
+        }
 
         //without cache
-        User value = userDao.load(id);
+//        User value = userDao.load(id);
 
         return Optional.ofNullable(value);
     }
 
-    private long updateValue(long id) {
-       return 1L;
+    private HwListener addNewListener() {
+        return (HwListener<Long, User>) (key, value, action) -> logger.info("key:{}, value:{}, action: {}", key, value, action);
     }
 }
 

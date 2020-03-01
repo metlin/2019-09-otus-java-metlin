@@ -31,6 +31,11 @@ public class User {
         this.age = age;
     }
 
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
     public User(long id, String name, int age, AddressDataSet address) {
         this.id = id;
         this.name = name;
