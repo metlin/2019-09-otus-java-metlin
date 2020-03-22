@@ -14,22 +14,19 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
-import ru.otus.homework11.dao.UserDao;
+import ru.otus.homework11.service.UserService;
 import ru.otus.webserver.helpers.FileSystemHelper;
 import ru.otus.webserver.services.TemplateProcessor;
 import ru.otus.webserver.services.UserAuthService;
-import ru.otus.webserver.servlet.AuthorizationFilter;
-import ru.otus.webserver.servlet.LoginServlet;
-import ru.otus.webserver.servlet.UsersApiServlet;
-import ru.otus.webserver.servlet.UsersServlet;
+import ru.otus.webserver.servlet.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class UsersWebServerImpl implements UsersWebServer {
-    private static final String START_PAGE_NAME = "index.html";
-    private static final String COMMON_RESOURCES_DIR = "static";
+    private static final String START_PAGE_NAME = "login.html";
+    private static final String COMMON_RESOURCES_DIR = "templates";
     private static final String ROLE_NAME_USER = "user";
     private static final String ROLE_NAME_ADMIN = "admin";
     private static final String CONSTRAINT_NAME = "auth";
@@ -38,21 +35,21 @@ public class UsersWebServerImpl implements UsersWebServer {
     private final SecurityType securityType;
     private final UserAuthService userAuthServiceForFilterBasedSecurity;
     private final LoginService loginServiceForBasicSecurity;
-    private final UserDao userDao;
+    private final UserService userService;
     private final Gson gson;
     private final TemplateProcessor templateProcessor;
     private final Server server;
 
     public UsersWebServerImpl(int port, SecurityType securityType,
                               UserAuthService userAuthServiceForFilterBasedSecurity,
-                              LoginService loginServiceForBasicSecurity, UserDao userDao,
+                              LoginService loginServiceForBasicSecurity, UserService userService,
                               Gson gson,
                               TemplateProcessor templateProcessor) {
         this.port = port;
         this.securityType = securityType;
         this.userAuthServiceForFilterBasedSecurity = userAuthServiceForFilterBasedSecurity;
         this.loginServiceForBasicSecurity = loginServiceForBasicSecurity;
-        this.userDao = userDao;
+        this.userService = userService;
         this.gson = gson;
         this.templateProcessor = templateProcessor;
         server = initContext();
@@ -97,8 +94,8 @@ public class UsersWebServerImpl implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
-        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
+        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userService)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new CreateUserServlet(templateProcessor, userService)), "/createUser");
         return servletContextHandler;
     }
 

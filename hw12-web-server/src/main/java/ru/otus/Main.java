@@ -25,10 +25,8 @@ import ru.otus.webserver.services.TemplateProcessorImpl;
 import ru.otus.webserver.services.UserAuthService;
 import ru.otus.webserver.services.UserAuthServiceImpl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static ru.otus.webserver.server.SecurityType.FILTER_BASED;
 
@@ -55,7 +53,7 @@ public class Main {
                 FILTER_BASED,
                 userAuthServiceForFilterBasedSecurity,
                 loginServiceForBasicSecurity,
-                userDao,
+                userService,
                 gson,
                 templateProcessor);
 
@@ -65,13 +63,12 @@ public class Main {
 
     private static List<User> saveAndGetAllUsers(UserService userService) {
         List<User> allUsers = new ArrayList<>();
-
         for (int i = 1; i <= 5; i++) {
             User user = new User("Ivan" + i, 10 + i, "user" + i, "1111");
             user.setAddress(new AddressDataSet("Lenina street, " + i));
             user.setPhoneNumber(List.of(new PhoneDataSet("12345" + i), new PhoneDataSet("234" + i)));
             long userId = userService.saveUser(user);
-            User user1 = userService.getTemplate(userId);
+            User user1 = userService.getUser(userId);
             allUsers.add(user1);
         }
 

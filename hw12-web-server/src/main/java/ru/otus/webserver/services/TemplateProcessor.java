@@ -1,8 +1,7 @@
 package ru.otus.webserver.services;
 
 import java.io.IOException;
-import java.util.Map;
 
 public interface TemplateProcessor {
-    String getPage(String filename, Map<String, Object> data) throws IOException;
+    <T> String getPage(String filename, T data) throws IOException;
 }

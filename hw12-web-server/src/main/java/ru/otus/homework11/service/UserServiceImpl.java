@@ -9,7 +9,8 @@ import ru.otus.homework11.database.DbServiceException;
 import ru.otus.homework11.model.User;
 import ru.otus.homework11.sessionmanager.SessionManager;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getTemplate(long id) {
+    public User getUser(long id) {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public long updateTemplate(User user) {
+    public long updateUser(User user) {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
@@ -71,16 +72,24 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public List<User> getAllUsers() {
+        List<User> allUsers = new ArrayList<>();
+        int count = 1;
+        while (getUser(count) != null){
+             allUsers.add(getUser(count));
+             count++;
+        }
+
+        return allUsers;
+    }
+
     private User getValue(long id) {
-        //with cache
         User value = cache.get(id);
         if (value == null) {
             value = userDao.load(id);
             cache.put(id, value);
         }
-
-        //without cache
-//        User value = userDao.load(id);
 
         return value;
     }
