@@ -1,7 +1,6 @@
 package ru.otus.homework11;
 
 import org.hibernate.SessionFactory;
-import ru.otus.homework11.cachehw.HWCacheDemo;
 import ru.otus.homework11.cachehw.HwCache;
 import ru.otus.homework11.cachehw.MyCache;
 import ru.otus.homework11.dao.UserDao;

@@ -20,7 +20,8 @@
         <module>hw09-orm</module>
         <module>hw10-hibernate</module>
         <module>hw11-cache</module>
-        <module>hw13-DI</module>
+        <module>hw12-web-server</module>
+       <module>hw13-DI</module>
     </modules>
 
     <properties>
