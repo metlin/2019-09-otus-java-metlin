@@ -98,7 +98,7 @@
     </dependencies>
 
     <build>
-        <finalName>${name}</finalName>
+        <finalName>hw13-DI</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

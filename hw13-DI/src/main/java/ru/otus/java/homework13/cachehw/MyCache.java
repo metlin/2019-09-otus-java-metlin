@@ -1,10 +1,13 @@
 package ru.otus.java.homework13.cachehw;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+@Component
 public class MyCache<K, V> implements HwCache<K, V> {
 
     private final Map<K, V> cache = new WeakHashMap<>();

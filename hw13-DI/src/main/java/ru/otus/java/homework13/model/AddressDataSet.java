@@ -1,6 +1,7 @@
 package ru.otus.java.homework13.model;
 
 import java.util.Objects;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "address")

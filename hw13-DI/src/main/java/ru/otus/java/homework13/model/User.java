@@ -1,5 +1,6 @@
 package ru.otus.java.homework13.model;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Entity

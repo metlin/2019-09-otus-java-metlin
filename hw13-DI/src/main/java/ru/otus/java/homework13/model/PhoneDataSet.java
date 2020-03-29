@@ -1,5 +1,7 @@
 package ru.otus.java.homework13.model;
 
+import javax.persistence.*;
+
 @Entity
 @Table(name = "phone")
 public class PhoneDataSet {
