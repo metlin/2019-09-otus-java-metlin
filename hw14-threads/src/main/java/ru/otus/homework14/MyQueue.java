@@ -4,7 +4,7 @@ class MyQueue {
     private int number;
     private boolean flag = false;
 
-    synchronized void get() {
+    synchronized int get() {
         while (!flag) {
             try {
                 wait();
@@ -16,6 +16,7 @@ class MyQueue {
         System.out.println("T2:   " + number);
         flag = false;
         notify();
+        return number;
     }
 
     synchronized void put(int number) {
