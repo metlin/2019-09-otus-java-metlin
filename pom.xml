@@ -23,6 +23,7 @@
         <module>hw12-web-server</module>
         <module>hw13-DI</module>
         <module>hw14-threads</module>
+        <module>hw15-message-system</module>
     </modules>
 
     <properties>
