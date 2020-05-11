@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hw15-message-system</artifactId>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -86,7 +87,7 @@
     </dependencies>
 
     <build>
-        <finalName>hw13-DI</finalName>
+        <finalName>hw15-message-system</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
